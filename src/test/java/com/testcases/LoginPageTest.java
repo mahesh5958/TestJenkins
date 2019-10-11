@@ -30,7 +30,7 @@ public class LoginPageTest extends BasePage {
 		driver.quit();
 	}
 
-
+	// ------------------ changes added ................................
 	@Test
 	public void LoginPage_Title_Test(){
 		String title = loginPage.validate_LoginPage_Title();
