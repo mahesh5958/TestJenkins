@@ -36,9 +36,6 @@ public class LoginPageTest extends BasePage {
 		String title = loginPage.validate_LoginPage_Title();
 		Assert.assertEquals(title, "login");
 		Reporter.log("LoginPage Title Verified", true);
-		
-		
-		System.out.println("Test finished");
 	}
 
 	@Test(dependsOnMethods="LoginPage_Title_Test")

@@ -11,7 +11,6 @@ import java.awt.AWTException;
 import java.awt.HeadlessException;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
@@ -26,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -291,7 +291,7 @@ public class GenericLibrary {
 		builder.doubleClick(doubleclickonWebElement).perform();
 		Thread.sleep(2000);
 	}
-	
+
 	public static void sliderDragAndDrap(WebDriver driver, WebElement sliderBar, WebElement slider, String dragChoicePercentage) {
 		int size = sliderBar.getSize().getWidth();
 		Reporter.log("Size of slider bar in pixels is: "+size, true);
@@ -469,10 +469,8 @@ public class GenericLibrary {
 		a.moveToElement(ele).build().perform();
 	}
 
-
-
-	public static WebElement waitFor(WebDriver driver, WebElement ele, String waitType, long waitInSeconds ) {
-		@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
+	public static WebElement fluentWait(WebDriver driver, WebElement ele, String waitType, long waitInSeconds) {
 		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
 		.withTimeout(waitInSeconds, TimeUnit.SECONDS)
 		.pollingEvery(500, TimeUnit.MILLISECONDS)
@@ -503,8 +501,27 @@ public class GenericLibrary {
 		return ele;
 	}
 
-	public static void smart_Wait(WebDriver driver, By by) throws InterruptedException
-	{
+	@SuppressWarnings({ "deprecation"})
+	public static WebElement fluentWait(WebDriver driver, By locator, int timeoutSeconds) {
+		//FluentWait Decleration
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(timeoutSeconds, TimeUnit.SECONDS) //Set timeout
+				.pollingEvery(100, TimeUnit.MILLISECONDS) //Set query/check/control interval
+				.withMessage("Timeout occured!") //Set timeout message
+				.ignoring(NoSuchElementException.class); //Ignore NoSuchElementException
+
+		//Wait until timeout period and when an element is found, then return it.
+		return wait.until(new Function<WebDriver, WebElement>() {
+			@Override
+			public WebElement apply(WebDriver webDriver) {
+				return driver.findElement(locator);
+			}
+		});
+		//This is lambda expression of below code block. It is only for JAVA 8
+		//return wait.until((WebDriver webDriver) -> driver.findElement(locator));
+	}
+
+	public static void smart_Wait(WebDriver driver, By by) throws InterruptedException {
 		int elssize=driver.findElements(by).size();
 		Reporter.log("This is sign button size==>"+elssize,true);
 		//		WebElement ele=driver.findElement(By.xpath("//a[@class='login' and @title='Log in to your customer account']"));

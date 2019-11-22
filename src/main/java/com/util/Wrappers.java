@@ -18,7 +18,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
 public class Wrappers {
-	
+
 	public static void highlightElement(WebDriver driver, WebElement element) throws Exception {
 		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='3px solid yellow'", element); // highlight
 		Thread.sleep(300); // delay between highlight and unhighlight 
@@ -145,7 +145,7 @@ public class Wrappers {
 			ele2.sendKeys(value);
 		}
 	}
-	
+
 	public static <T> void clickSelectAndType(WebDriver driver, T eleAttr1, T eleAttr2, String value) throws Exception {
 		if(eleAttr1.getClass().getName().contains("By") && eleAttr2.getClass().getName().contains("By")) {
 			WebElement ele1 = driver.findElement((By)eleAttr1);
@@ -197,7 +197,7 @@ public class Wrappers {
 			((JavascriptExecutor)driver).executeScript("arguments[0].value='"+value+"'",ele2);
 		}
 	}
-	
+
 	public static <T> void jsClickSelectAndType(WebDriver driver, T eleAttr1, T eleAttr2, String value) throws Exception {
 		if(eleAttr1.getClass().getName().contains("By") && eleAttr2.getClass().getName().contains("By")) {
 			WebElement ele1 = driver.findElement((By)eleAttr1);
@@ -362,7 +362,7 @@ public class Wrappers {
 			}
 		}
 	}
-	
+
 	public static <T> void dragAndDrop(WebDriver driver, T fromWebElementAttr, T toWebElementAttr) {
 		Actions builder = new Actions(driver);
 		if(fromWebElementAttr.getClass().getName().contains("By") && toWebElementAttr.getClass().getName().contains("By")) {
@@ -390,7 +390,7 @@ public class Wrappers {
 			dragAndDrop.perform();
 		}
 	}
-	
+
 	public static <T> void dragAndDrop_Method3(WebDriver driver, T fromWebElementAttr, T toWebElementAttr) throws InterruptedException {
 		Actions builder = new Actions(driver);
 		if(fromWebElementAttr.getClass().getName().contains("By") && toWebElementAttr.getClass().getName().contains("By")) {
@@ -420,7 +420,7 @@ public class Wrappers {
 			Thread.sleep(2000);
 		}
 	}
-	
+
 	public static <T> void selectElementByVisibleText(WebDriver driver, T eleAttr, String Name) {
 		if(eleAttr.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)eleAttr);
@@ -432,7 +432,7 @@ public class Wrappers {
 			selectitem.selectByVisibleText(Name);
 		}
 	}
-	
+
 	public static <T> void selectElementByValue(WebDriver driver, T eleAttr, String value) {
 		if(eleAttr.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)eleAttr);
@@ -444,7 +444,7 @@ public class Wrappers {
 			selectitem.selectByValue(value);
 		}
 	}
-	
+
 	public static <T> void selectElementByIndex(WebDriver driver, T eleAttr, int index) {
 		if(eleAttr.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)eleAttr);
@@ -456,7 +456,7 @@ public class Wrappers {
 			selectitem.selectByIndex(index);
 		}
 	}
-	
+
 	public static <T> void uploadFile(WebDriver driver, T browseButton, String filePath) throws Exception {
 		if(browseButton.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)browseButton);
@@ -500,7 +500,7 @@ public class Wrappers {
 			Thread.sleep(1000);
 		}
 	}
-	
+
 	public static <T> void uploadFile2(WebDriver driver, T browseButton, String filePath) throws Exception {
 		if(browseButton.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)browseButton);
@@ -544,7 +544,7 @@ public class Wrappers {
 			Thread.sleep(1000);
 		}
 	}
-	
+
 	public static <T> void scrollIntoView(WebDriver driver, T eleAttr) {
 		if(eleAttr.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)eleAttr);
@@ -556,7 +556,7 @@ public class Wrappers {
 			js.executeScript("arguments[0].scrollIntoView(true);", ele);
 		}
 	}
-	
+
 	public static <T> void check(WebDriver driver, T checkBox) {
 		if(checkBox.getClass().getName().contains("By")) {
 			WebElement ele = driver.findElement((By)checkBox);
@@ -568,10 +568,24 @@ public class Wrappers {
 				ele.click();
 		}
 	}	
-	
+
 	public static WebElement getWebElement(WebDriver driver, By locator) {
 		return driver.findElement(locator);
 	}
-	
-	
+
+	// Returns attribute value
+	public static <T> String getAttributeValue(WebDriver driver, T elementAttr, String attribute) {
+		if(elementAttr.getClass().getName().contains("By")) {
+			WebElement ele = driver.findElement((By)elementAttr);
+			String value = ele.getAttribute(attribute);
+			return value;
+		} else {
+			WebElement ele = ((WebElement)elementAttr);
+			String value = ele.getAttribute(attribute);
+			return value;
+		}
+	}
+
+
+
 }

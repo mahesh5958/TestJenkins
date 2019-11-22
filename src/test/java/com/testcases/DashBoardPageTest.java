@@ -26,7 +26,7 @@ public class DashBoardPageTest extends BasePage {
 		initialization();
 		loginPage = new LoginPage();
 		dashBoardPage = loginPage.login(prop.getProperty("username"), prop.getProperty("password"));
-		reader = new ExcelUtility("./src/main/java/com/testdata/AuditsData.xlsx");
+		reader = new ExcelUtility(prop.getProperty("excelFilePath"));
 	}
 	
 	@AfterMethod

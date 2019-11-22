@@ -1,4 +1,7 @@
 /**
+
+D:\Value chain\Images\Capture.jpg
+
  * @author UmaMaheswararao
  */
 
@@ -23,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.Reporter;
+import org.testng.asserts.SoftAssert;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -317,9 +321,8 @@ public class VerificationLibrary {
 	}	
 
 	public static void verifyWebTableDatesOrder(WebDriver driver, List<WebElement> eleList, String order, String format) throws Exception {
+		SoftAssert a = new SoftAssert();
 		if (order.equalsIgnoreCase("Ascending")) {
-			Reporter.log("***************** Expected Dates ******************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[6]/div/div"));
 			List<String> stringDates = new ArrayList<>();
 			for (WebElement ele : eleList) {
 				stringDates.add(ele.getText());
@@ -339,33 +342,20 @@ public class VerificationLibrary {
 					Reporter.log("Empty Cell", true);
 				}
 			}
+			ArrayList<Date> datesActual = new ArrayList<Date>();
+			datesActual.addAll(datesExpected);
 			Collections.sort(datesExpected); // Ascending order
+			Reporter.log("***** Expected dates *****", true);
 			for (Date sl : datesExpected) {
 				Reporter.log("Expected: " + sl, true);
 			}
-			// After sorting - Actual
-			Reporter.log("***************** Actual Dates ******************", true);
-			List<Date> datesActual = new ArrayList<>(stringDates.size());
-			SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-			for (String date : stringDates) {
-				try {
-					if (date != ""){
-						if (sdf2.parse(date) == null) {
-							Reporter.log("Empty Cell", true);
-						} else {
-							datesActual.add(sdf2.parse(date));
-						}
-					}
-				} catch (Exception ex) {
-					Reporter.log("Empty Cell", true);
-				}
-			}
+			Reporter.log("***** Actual dates *****", true);
 			for (Date sl : datesActual) {
 				Reporter.log("Actual: " + sl, true);
 			}
+			a.assertEquals(datesActual, datesExpected, "Dates are not in ascending order");
+			Reporter.log("Dates are in ascending order", true);
 		}else if (order.equalsIgnoreCase("Descending")) {
-			Reporter.log("***************** Expected Dates ******************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[6]/div/div"));
 			List<String> stringDates = new ArrayList<>();
 			for (WebElement ele : eleList) {
 				stringDates.add(ele.getText());
@@ -385,218 +375,195 @@ public class VerificationLibrary {
 					Reporter.log("Empty Cell", true);
 				}
 			}
+			ArrayList<Date> datesActual = new ArrayList<Date>();
+			datesActual.addAll(datesExpected);
 			Collections.sort(datesExpected, Collections.reverseOrder()); // Descending order
+			Reporter.log("***** Expected dates *****", true);
 			for (Date sl : datesExpected) {
 				Reporter.log("Expected: " + sl, true);
 			}
-			// After sorting - Actual
-			Reporter.log("***************** Actual Dates ******************", true);
-			List<Date> datesActual = new ArrayList<>(stringDates.size());
-			SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-			for (String date : stringDates) {
-				try {
-					if (date != ""){
-						if (sdf2.parse(date) == null) {
-							Reporter.log("Empty Cell", true);
-						} else {
-							datesActual.add(sdf2.parse(date));
-						}
-					}
-				} catch (Exception ex) {
-					Reporter.log("Empty Cell", true);
-				}
-			}
+			Reporter.log("***** Actual dates *****", true);
 			for (Date sl : datesActual) {
 				Reporter.log("Actual: " + sl, true);
 			}
+			a.assertEquals(datesActual, datesExpected, "Dates are not in descending order");
+			Reporter.log("Dates are in descending order", true);
 		}
-
+		a.assertAll();
 	} 
 
 	public static void verifyWebTableTextDataOrderWithoutCaseSensitive(WebDriver driver, List<WebElement> eleList, String order) {
+		SoftAssert a = new SoftAssert();
 		if (order.equalsIgnoreCase("Ascending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<String> expectedList = new ArrayList<>();
 			for (WebElement ele : eleList) {
 				expectedList.add(ele.getText());
 			}
-			//Collections.sort(defaultNameList); // Ascending order
-			for (String s : expectedList) {
-				Reporter.log("Expected data: "+s, true);
-			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<String> actualList = new ArrayList<>();
-			for (WebElement ele : eleList) {
-				actualList.add(ele.getText());
-				Reporter.log("Sorted data: "+ele.getText(), true);
+			actualList.addAll(expectedList);
+			//Collections.sort(expectedList); // Ascending order
+			Reporter.log("***** Expected *****", true);
+			for (String s : expectedList) {
+				Reporter.log("Expected: "+s, true);
 			}
-			Assert.assertEquals(expectedList, actualList, "Ascending order is NOT functional");
+			Reporter.log("***** Actual *****", true);
+			for (String s : actualList) {
+				Reporter.log("Actual: "+s, true);
+			}
+			a.assertEquals(expectedList, actualList, "Ascending order is NOT functional");
+			Reporter.log("Ascending order is functional", true);
 		}else if (order.equalsIgnoreCase("Descending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<String> expectedList = new ArrayList<>();
 			for (WebElement ele : eleList) {
 				expectedList.add(ele.getText());
 			}
+			List<String> actualList = new ArrayList<>();
+			actualList.addAll(expectedList);
 			//Collections.sort(expectedList, Collections.reverseOrder()); // Descending order
 			Collections.sort(expectedList, String.CASE_INSENSITIVE_ORDER);
 			Collections.reverse(expectedList);
+			Reporter.log("***** Expected *****", true);
 			for (String s : expectedList) {
-				Reporter.log("Expected data: "+s, true);
+				Reporter.log("Expected: "+s, true);
 			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
-			List<String> actualList = new ArrayList<>();
-			for (WebElement ele : eleList) {
-				actualList.add(ele.getText());
-				Reporter.log("Sorted data: "+ele.getText(), true);
+			Reporter.log("***** Actual *****", true);
+			for (String s : actualList) {
+				Reporter.log("Actual: "+s, true);
 			}
-			Assert.assertEquals(expectedList, actualList, "Descending order is NOT functional");
+			a.assertEquals(expectedList, actualList, "Descending order is NOT functional");
+			Reporter.log("Descending order is functional", true);
 		}
+		a.assertAll();
 	}
 
 	public static void verifyWebTableTextDataOrderWithCaseSensitive(WebDriver driver, List<WebElement> eleList, String order) {
+		SoftAssert a = new SoftAssert();
 		if (order.equalsIgnoreCase("Ascending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<String> expectedList = new ArrayList<>();
 			for (WebElement ele : eleList) {
 				expectedList.add(ele.getText());
 			}
+			List<String> actualList = new ArrayList<>();
+			actualList.addAll(expectedList);
 			Collections.sort(expectedList); // Ascending order
+			Reporter.log("***** Expected *****", true);
 			for (String s : expectedList) {
-				Reporter.log("Expected data: "+s, true);
+				Reporter.log("Expected: "+s, true);
 			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
-			List<String> actualList = new ArrayList<>();
-			for (WebElement ele : eleList) {
-				actualList.add(ele.getText());
-				Reporter.log("Sorted data: "+ele.getText(), true);
+			Reporter.log("***** Actual *****", true);
+			for (String s : actualList) {
+				Reporter.log("Actual: "+s, true);
 			}
-			Assert.assertEquals(expectedList, actualList, "Ascending order is NOT functional");
+			a.assertEquals(expectedList, actualList, "Ascending order is NOT functional");
+			Reporter.log("Ascending order is functional", true);
 		}else if (order.equalsIgnoreCase("Descending")) {
-			Reporter.log("***************** Expected ****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<String> expectedList = new ArrayList<>();
 			for (WebElement ele : eleList) {
 				expectedList.add(ele.getText());
 			}
-			Collections.sort(expectedList, Collections.reverseOrder()); // Descending order
-			for (String s : expectedList) {
-				Reporter.log("Expected data: "+s, true);
-			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<String> actualList = new ArrayList<>();
-			for (WebElement ele : eleList) {
-				actualList.add(ele.getText());
-				Reporter.log("Sorted data: "+ele.getText(), true);
+			actualList.addAll(expectedList);
+			Collections.sort(expectedList, Collections.reverseOrder()); // Descending order
+			Reporter.log("***** Expected *****", true);
+			for (String s : expectedList) {
+				Reporter.log("Expected: "+s, true);
 			}
-			Assert.assertEquals(expectedList, actualList, "Descending order is NOT functional");
+			Reporter.log("***** Actual *****", true);
+			for (String s : actualList) {
+				Reporter.log("Actual: "+s, true);
+			}
+			a.assertEquals(expectedList, actualList, "Descending order is NOT functional");
+			Reporter.log("Descending order is functional", true);
 		}
+		a.assertAll();
 	}
 
 	public static void verifyWebTableNumberDataOrder(WebDriver driver, List<WebElement> eleList, String order) {
+		SoftAssert a = new SoftAssert();
 		if (order.equalsIgnoreCase("Ascending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<Integer> expNumList = new ArrayList<Integer>();
 			for (WebElement ele : eleList) {
 				expNumList.add(NumberUtils.toInt(ele.getText()));
 			}
+			List<Integer> actNumList = new ArrayList<Integer>();
+			actNumList.addAll(expNumList);
 			Collections.sort(expNumList); // Ascending order
+			Reporter.log("***** Expected *****", true);
 			for (Integer s : expNumList) {
-				Reporter.log("Expected data: "+s, true);
+				Reporter.log("Expected: "+s, true);
 			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
-			List<Integer> actNumList = new ArrayList<Integer>();
-			for (WebElement ele : eleList) {
-				actNumList.add(NumberUtils.toInt(ele.getText()));
-			}
+			Reporter.log("***** Actual *****", true);
 			for (Integer s : actNumList) {
-				Reporter.log("Sorted data: "+s, true);
+				Reporter.log("Actual: "+s, true);
 			}
-			Assert.assertEquals(actNumList, expNumList, "Ascending order is NOT functional");
+			a.assertEquals(actNumList, expNumList, "Ascending order is NOT functional");
+			Reporter.log("Ascending order is functional", true);
 		}else if (order.equalsIgnoreCase("Descending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<Integer> expNumList = new ArrayList<Integer>();
 			for (WebElement ele : eleList) {
 				expNumList.add(NumberUtils.toInt(ele.getText()));
 			}
-			Collections.sort(expNumList, Collections.reverseOrder()); // Descending order
-			for (Integer s : expNumList) {
-				Reporter.log("Expected data: "+s, true);
-			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<Integer> actNumList = new ArrayList<Integer>();
-			for (WebElement ele : eleList) {
-				actNumList.add(NumberUtils.toInt(ele.getText()));
+			actNumList.addAll(expNumList);
+			Collections.sort(expNumList, Collections.reverseOrder()); // Descending order
+			Reporter.log("***** Expected *****", true);
+			for (Integer s : expNumList) {
+				Reporter.log("Expected: "+s, true);
 			}
+			Reporter.log("***** Actual *****", true);
 			for (Integer s : actNumList) {
-				Reporter.log("Sorted data: "+s, true);
+				Reporter.log("Actual: "+s, true);
 			}
-			Assert.assertEquals(actNumList, expNumList, "Descending order is NOT functional");
+			a.assertEquals(actNumList, expNumList, "Descending order is NOT functional");
+			Reporter.log("Descending order is functional", true);
 		}
+		a.assertAll();
 	}
 
 	public static void verifyWebTableCurrencyDataOrder(WebDriver driver, List<WebElement> eleList, String order) {
+		SoftAssert a = new SoftAssert();
 		if (order.equalsIgnoreCase("Ascending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<Long> expList = new ArrayList<Long>();
 			for (WebElement ele : eleList) {
 				String txt = ele.getText();
 				String txtNew = txt.replaceAll("[, £ $ ₹ zł € $ лв R$ $ CHF ￥ Kč kr $ kn Ft Rp ₪ ¥ ₩ $ RM kr $ ₱ lei руб kr $ ฿ ₺ R د.إ]", "");
 				expList.add(NumberUtils.toLong(txtNew));
 			}
+			List<Long> actList = new ArrayList<Long>();
+			actList.addAll(expList);
 			Collections.sort(expList); // Ascending order
+			Reporter.log("***** Expected *****", true);
 			for (Long s : expList) {
-				Reporter.log("Expected data: "+s, true);
+				Reporter.log("Expected: "+s, true);
 			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
-			List<Long> actList = new ArrayList<Long>();
-			for (WebElement ele : eleList) {
-				String txt = ele.getText();
-				String txtNew = txt.replaceAll("[, £ $ ₹ zł € $ лв R$ $ CHF ￥ Kč kr $ kn Ft Rp ₪ ¥ ₩ $ RM kr $ ₱ lei руб kr $ ฿ ₺ R د.إ]", "");
-				actList.add(NumberUtils.toLong(txtNew));
-			}
+			Reporter.log("***** Actual *****", true);
 			for (Long s : actList) {
-				Reporter.log("Sorted data: "+s, true);
+				Reporter.log("Actual: "+s, true);
 			}
-			Assert.assertEquals(expList, actList, "Ascending order is NOT functional");
+			a.assertEquals(expList, actList, "Ascending order is NOT functional");
+			Reporter.log("Ascending order is functional", true);
 		}else if (order.equalsIgnoreCase("Descending")) {
-			Reporter.log("***************** Expected *****************", true);
-			//List<WebElement> eleList = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<Long> expList = new ArrayList<Long>();
 			for (WebElement ele : eleList) {
 				String txt = ele.getText();
 				String txtNew = txt.replaceAll("[, £ $ ₹ zł € $ лв R$ $ CHF ￥ Kč kr $ kn Ft Rp ₪ ¥ ₩ $ RM kr $ ₱ lei руб kr $ ฿ ₺ R د.إ]", "");
 				expList.add(NumberUtils.toLong(txtNew));
 			}
-			Collections.sort(expList, Collections.reverseOrder()); // Descending order
-			for (Long s : expList) {
-				Reporter.log("Expected data: "+s, true);
-			}
-			Reporter.log("***************** Actual ******************", true);
-			//List<WebElement> eleList2 = driver.findElements(By.xpath("//tr/td[1]/a"));
 			List<Long> actList = new ArrayList<Long>();
-			for (WebElement ele : eleList) {
-				String txt = ele.getText();
-				String txtNew = txt.replaceAll("[, £ $ ₹ zł € $ лв R$ $ CHF ￥ Kč kr $ kn Ft Rp ₪ ¥ ₩ $ RM kr $ ₱ lei руб kr $ ฿ ₺ R د.إ]", "");
-				actList.add(NumberUtils.toLong(txtNew));
+			actList.addAll(expList);
+			Collections.sort(expList, Collections.reverseOrder()); // Descending order
+			Reporter.log("***** Expected *****", true);
+			for (Long s : expList) {
+				Reporter.log("Expected: "+s, true);
 			}
+			Reporter.log("***** Actual *****", true);
 			for (Long s : actList) {
-				Reporter.log("Sorted data: "+s, true);
+				Reporter.log("Actual: "+s, true);
 			}
-			Assert.assertEquals(expList, actList, "Descending order is NOT functional");
+			a.assertEquals(expList, actList, "Descending order is NOT functional");
+			Reporter.log("Descending order is functional", true);
 		}
+		a.assertAll();
 	}
 
 	public static boolean isFileDownloaded(String downloadPath, String fileName) {
@@ -654,6 +621,17 @@ public class VerificationLibrary {
 		Collections.sort(sortedlist); // Sorting in Ascending order
 		Assert.assertEquals(tempList, sortedlist, "Options are not in sorted order");
 	}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
